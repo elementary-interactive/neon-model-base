@@ -2,15 +2,12 @@
 
 namespace Neon\Models\Statuses;
 
-interface Basic
-{
-    /** The default stasus of all possible statuses.
-     * 
-     */
-    protected $default;
+enum BasicStatus: string implements BasicInterface {
+    case Active     = 'A';
+    case Inactive   = 'I';
+    case New        = 'N';
 
-    /** Get the default status's value.
-     * 
-     */
-    public static function default(): string;
+    public static function default(): string {
+      return BasicStatus::New->value;
+    }
 }
