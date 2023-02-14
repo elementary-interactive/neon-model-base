@@ -1,6 +1,6 @@
 <?php
 
-namespace Neon\Model\Scopes;
+namespace Neon\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
