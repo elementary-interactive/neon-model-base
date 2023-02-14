@@ -1,6 +1,6 @@
 <?php
 
-namespace Neon\Models\Repositories\Interfaces;
+namespace Neon\Repositories\Interfaces;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model as EloquentModel;

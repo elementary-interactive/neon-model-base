@@ -1,11 +1,11 @@
 <?php
 
-namespace Neon\Models\Repositories;
+namespace Neon\Repositories;
 
 // use App\Domain\Core\Models\Role;
 // use App\Domain\Merchandising\Filters\ProfieldReportFilter;
 // use App\Domain\Merchandising\Models\EloquentModel;
-use Neon\Models\Repositories\Interfaces\ModelRepository as ModelREpositoryInterface;
+use Neon\Models\Interfaces\ModelRepository as ModelREpositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
