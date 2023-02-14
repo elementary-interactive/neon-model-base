@@ -3,6 +3,7 @@
 namespace Neon\Models\Traits;
 
 use Neon\Models\Scopes\ActiveScope;
+use Neon\Models\Statuses\BasicStatus;
 
 /** 
  
@@ -22,62 +23,45 @@ trait Statusable
   }
 
   /**
-   * Publish a statusable model instance.
+   * Activate a statusable model instance.
    *
    * @return bool
    */
-  public function turnTo($time = null): bool
+  public function activate($time = null): bool
   {
-    if (is_null($time)) {
-      $time = now();
-    }
-
     /** If the publishing event does not return false, we will proceed with this operation.
      */
-    if ($this->fireModelEvent('publishing') === false) {
+    if ($this->fireModelEvent('activating') === false) {
       return false;
     }
 
-    $this->{$this->getPublishedAtColumn()} = $time;
+    $this->{$this->getStatusColumn()} = BasicStatus::Active->value;
 
     $result = $this->save();
 
-    $this->fireModelEvent('published', false);
+    $this->fireModelEvent('activated', false);
 
     return $result;
   }
 
-  /** Set expired at to a certain time.
-   * 
-   * @return bool
-   */
-  public function expiredAt(Carbon\Carbon $time): bool
-  {
-    return $this->expire($time);
-  }
-
   /**
-   * Expire a statusable model instance.
+   * Inactivate a statusable model instance.
    *
    * @return bool
    */
-  public function expire($time = null): bool
+  public function inactivate(): bool
   {
-    if (is_null($time)) {
-      $time = now();
-    }
-
     /** If the publishing event does not return false, we will proceed with this operation.
      */
-    if ($this->fireModelEvent('expiring') === false) {
+    if ($this->fireModelEvent('inactivating') === false) {
       return false;
     }
 
-    $this->{$this->getExpiredAtColumn()} = $time;
+    $this->{$this->getStatusColumn()} = BasicStatus::Inactive->value;
 
     $result = $this->save();
 
-    $this->fireModelEvent('expired', false);
+    $this->fireModelEvent('inactivated', false);
 
     return $result;
   }
@@ -88,98 +72,73 @@ trait Statusable
    */
   public function initializeStatusable()
   {
-    /** Set published_at field's cast. */
-    if (!isset($this->casts[$this->getPublishedAtColumn()])) {
-      $this->casts[$this->getPublishedAtColumn()] = 'datetime';
-    }
-
-    /** Set expired_at field's cast. */
-    if (!isset($this->casts[$this->getExpiredAtColumn()])) {
-      $this->casts[$this->getExpiredAtColumn()] = 'datetime';
+    /** Set status field's cast. */
+    if (!isset($this->casts[$this->getStatusColumn()])) {
+      $this->casts[$this->getStatusColumn()] = BasicStatus;
     }
   }
 
   /**
-   * Register a "publishing" model event callback with the dispatcher.
+   * Register a "inactivating" model event callback with the dispatcher.
    *
    * @param  \Closure|string  $callback
    * @return void
    */
-  public static function publishing($callback)
+  public static function inactivating($callback)
   {
-    static::registerModelEvent('publishing', $callback);
+    static::registerModelEvent('inactivating', $callback);
   }
 
   /**
-   * Register a "published" model event callback with the dispatcher.
+   * Register a "inactivated" model event callback with the dispatcher.
    *
    * @param  \Closure|string  $callback
    * @return void
    */
-  public static function published($callback)
+  public static function inactivated($callback)
   {
-    static::registerModelEvent('published', $callback);
+    static::registerModelEvent('inactivated', $callback);
   }
 
   /**
-   * Register a "expiring" model event callback with the dispatcher.
+   * Register a "activating" model event callback with the dispatcher.
    *
    * @param  \Closure|string  $callback
    * @return void
    */
-  public static function expiring($callback)
+  public static function activating($callback)
   {
-    static::registerModelEvent('expiring', $callback);
+    static::registerModelEvent('activating', $callback);
   }
 
   /**
-   * Register a "expired" model event callback with the dispatcher.
+   * Register a "activated" model event callback with the dispatcher.
    *
    * @param  \Closure|string  $callback
    * @return void
    */
-  public static function expired($callback)
+  public static function activated($callback)
   {
-    static::registerModelEvent('expired', $callback);
+    static::registerModelEvent('activated', $callback);
   }
 
   /**
-   * Get the name of the "published at" column.
+   * Get the name of the "status" column.
    *
    * @return string
    */
-  public function getPublishedAtColumn()
+  public function getStatusColumn()
   {
-    return defined(static::class . '::PUBLISHED_AT') ? static::PUBLISHED_AT : 'published_at';
+    return defined(static::class . '::STATUS') ? static::STATUS : 'status';
   }
 
   /**
-   * Get the fully qualified "published at" column.
+   * Get the fully qualified "status" column.
    *
    * @return string
    */
-  public function getQualifiedPublishedAtColumn()
+  public function getQualifiedStatusColumn()
   {
-    return $this->qualifyColumn($this->getPublishedAtColumn());
-  }
-
-  /**
-   * Get the name of the "expired at" column.
-   *
-   * @return string
-   */
-  public function getExpiredAtColumn()
-  {
-    return defined(static::class . '::EXPIRED_AT') ? static::EXPIRED_AT : 'expired_at';
-  }
-
-  /**
-   * Get the fully qualified "expired at" column.
-   *
-   * @return string
-   */
-  public function getQualifiedExpirededAtColumn()
-  {
-    return $this->qualifyColumn($this->getExpiredAtColumn());
+    return $this->qualifyColumn($this->getStatusColumn());
   }
 }
