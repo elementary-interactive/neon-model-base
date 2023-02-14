@@ -38,14 +38,7 @@ class ModelRepository implements ModelRepositryInterface
     public function all(?string $status): array|Collection
     {
         $query = $this->model->newQuery();
-        $user = auth()->user();
-
-        if ($user && !($user->isAdmin())) {
-            if ($user->hasRoleFrom([\Role::LEADER_RURAL, \Role::LEADER_CENTRAL])) {
-                $query->where('user_id', $user->id);
-            }
-        }
-
+        
         if ($status) {
             $query->where('status', $status);
         }
