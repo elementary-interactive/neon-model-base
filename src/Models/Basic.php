@@ -5,7 +5,7 @@ namespace Neon\Models;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Neon\Model\Scopes\ActiveScope;
 
-class Base extends EloquentModel
+class Basic extends EloquentModel
 {
   /** Define basic status values.
    */
@@ -29,6 +29,8 @@ class Base extends EloquentModel
   protected static function booted()
   {
     // static::addGlobalScope(new ActiveScope);
+    
+        // 'status'    => self::STATUS_DEFAULT,
   }
 
   /**
