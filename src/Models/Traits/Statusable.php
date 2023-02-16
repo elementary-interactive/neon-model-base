@@ -21,6 +21,18 @@ trait Statusable
   {
     static::addGlobalScope(new ActiveScope);
   }
+  
+  /** Initialize the statusable trait for an instance.
+   * 
+   * @return void
+   */
+  public function initializeStatusable()
+  {
+    /** Set status field's cast. */
+    if (!isset($this->casts[$this->getStatusColumn()])) {
+      $this->casts[$this->getStatusColumn()] = BasicStatus;
+    }
+  }
 
   /**
    * Activate a statusable model instance.
@@ -64,18 +76,6 @@ trait Statusable
     $this->fireModelEvent('inactivated', false);
 
     return $result;
-  }
-
-  /** Initialize the statusable trait for an instance.
-   * 
-   * @return void
-   */
-  public function initializeStatusable()
-  {
-    /** Set status field's cast. */
-    if (!isset($this->casts[$this->getStatusColumn()])) {
-      $this->casts[$this->getStatusColumn()] = BasicStatus::default();
-    }
   }
 
   /**
