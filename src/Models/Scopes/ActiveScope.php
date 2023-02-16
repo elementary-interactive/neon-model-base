@@ -5,6 +5,7 @@ namespace Neon\Models\Scopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Neon\Models\Statuses\BasicStatus;
 
 class ActiveScope implements Scope
 {
@@ -17,6 +18,6 @@ class ActiveScope implements Scope
    */
   public function apply(Builder $builder, Model $model)
   {
-    $builder->where($model->getQualifiedStatusColumn(), '=', $model::STATUS_ACTIVE);
+    $builder->where($model->getQualifiedStatusColumn(), '=', BasicStatus::Active->value);
   }
 }
