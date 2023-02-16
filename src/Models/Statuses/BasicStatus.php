@@ -7,7 +7,8 @@ enum BasicStatus: string implements BasicInterface {
     case Inactive   = 'I';
     case New        = 'N';
 
-    public static function default(): {
+    public static function default()
+    {
       return self::New;
     }
 }

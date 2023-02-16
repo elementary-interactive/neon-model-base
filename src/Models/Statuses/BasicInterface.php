@@ -7,5 +7,5 @@ interface BasicInterface
     /** Get the default status's value.
      * 
      */
-    public static function default(): string;
+    public static function default();
 }
