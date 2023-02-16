@@ -30,7 +30,7 @@ trait Statusable
   {
     /** Set status field's cast. */
     if (!isset($this->casts[$this->getStatusColumn()])) {
-      $this->casts[$this->getStatusColumn()] = BasicStatus;
+      $this->casts[$this->getStatusColumn()] = BasicStatus::class;
     }
   }
 
