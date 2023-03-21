@@ -22,7 +22,7 @@
     "extra": {},
     "require": {
       "php": "^8.0",
-      "laravel/framework": "^10.0",
+      "laravel/framework": "^10.0"
     },
     "repositories": [],
     "branch-alias": {}
