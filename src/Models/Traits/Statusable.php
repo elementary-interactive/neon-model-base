@@ -5,6 +5,8 @@ namespace Neon\Models\Traits;
 use Neon\Models\Scopes\ActiveScope;
 use Neon\Models\Statuses\BasicStatus;
 
+use Illuminate\Support\Str;
+
 /** 
  
  * 
@@ -32,6 +34,14 @@ trait Statusable
     if (!isset($this->casts[$this->getStatusColumn()])) {
       $this->casts[$this->getStatusColumn()] = BasicStatus::class;
     }
+    
+    foreach (BasicStatus::cases() as $case)
+    {
+      $this->casts['is_'.strtolower($case->name)]      = 'boolean';
+      // $this->attributes['is_'.strtolower($case->name)] = true;
+    }
+
+    // dump($this);
   }
 
   /**
@@ -140,5 +150,36 @@ trait Statusable
   public function getQualifiedStatusColumn()
   {
     return $this->qualifyColumn($this->getStatusColumn());
+  }
+
+  public function getIsActiveAttribute()
+  {
+    return $this->{$this->getStatusColumn()} == BasicStatus::Active;
+  }
+
+  public function setIsActiveAttribute(bool $value)
+  {
+    if ($value == true)
+    {
+      $this->{$this->getStatusColumn()} = BasicStatus::Active;
+    }
+  }
+
+  public function getIsNewAttribute()
+  {
+    return $this->{$this->getStatusColumn()} == BasicStatus::New;
+  }
+
+  public function getIsInactiveAttribute()
+  {
+    return $this->{$this->getStatusColumn()} == BasicStatus::Inactive;
+  }
+  
+  public function setIsInctiveAttribute(bool $value)
+  {
+    if ($value == true)
+    {
+      $this->{$this->getStatusColumn()} = BasicStatus::Inactive;
+    }
   }
 }
