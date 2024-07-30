@@ -16,6 +16,7 @@ class Basic extends EloquentModel
    */
   protected static function booted()
   {
+    parent::booted();
     // static::addGlobalScope(new ActiveScope);
     
         // 'status'    => self::STATUS_DEFAULT,
